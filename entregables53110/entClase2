@@ -1,0 +1,62 @@
+class ProductManager {
+    constructor ( file = []) {
+        this.products = file
+    }
+
+    addProduct = ( title, desciption, thumbnail, price, stock, code ) => {
+        let newProduct = {
+            title: title,
+            desciption: desciption,
+            thumbnail: thumbnail,
+            price: price,
+            stock: stock,
+            code: code
+        }        
+        
+        // validar no repetir code y sean obligatorios los campos
+        let codeRepeat = this.products.find(c => c.code === code)
+        if (codeRepeat) {
+            throw new Error(`El codigo : ${codeRepeat.code} ya existe. Intenta otro codigo.`)
+        }
+        if (!title || !desciption || !thumbnail || !price || !stock || !code ) {
+            throw new Error('todos los campos son obligatorios!!')
+        }
+        // id incrementable
+        let lenght = this.products.length
+        if ( lenght === 0 ) {
+            newProduct.id = (this.products.length) + 1
+        } else {
+            newProduct.id = ( this.products.length - 1 ) + 1
+        }
+
+        this.products.push(newProduct)
+    }
+
+    getProducts = () => {
+        if ( this.products.length > 1 ) {
+            return this.products  
+        } else {
+            throw new Error('no hay productos en tu plataforma.')
+        } 
+    }
+
+    getProductsById = (id) => {
+        let arr = this.products
+        let findId = arr.find(obj => obj.id === id )
+
+        if (!findId) {
+            throw new Error(`ID: '${findId}' Not found.`)
+        } else {
+            console.log( `✅ ID ${findId.id} encontrado.\n Title: ${findId.title}\n Price: ${findId.price}\n Stock: ${findId.stock}` )
+            return 
+        }
+    }
+}
+
+let test = new ProductManager()
+
+test.addProduct('caja', 'etc...', 'http://img...', 123, 2,3)
+test.addProduct('caja', 'etc...', 'http://img...', 123, 2,4) 
+
+/* test.getProducts() */
+test.getProductsById(1)
