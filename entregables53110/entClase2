@@ -1,44 +1,55 @@
+const fs = require('fs')
+
 class ProductManager {
-    constructor ( file = []) {
-        this.products = file
+    constructor ( path ) {
+        this.path = path
+    }    
+    
+    getProducts = async () => {
+        try {
+            let data = await fs.promises.readFile( this.path, 'utf-8' )
+            return JSON.parse(data)
+        } catch (err) {
+            /* fs.promises.writeFile(this.path, JSON.stringify([]), 'utf-8') */
+            return []
+        }
     }
 
-    addProduct = ( title, desciption, thumbnail, price, stock, code ) => {
+    // AGREGAR PRODUCTO
+    addProduct = async ( title, description, thumbnail, price, stock, code ) => {        
+        // leer archivo
+        let contentFile = await this.getProducts() 
+        console.log('reading contentFile:', contentFile)
+        
+        // validar no repetir code 
+        let codeRepeat = contentFile.find(c => c.code === code)
+        // id incrementable
+        let id = 1
+        let length = contentFile.length
+
+        if (length > 0 ) id = contentFile[length - 1].id + 1
+
+        // campos obligatorios 
+        if (codeRepeat) {
+            throw new Error(`El codigo : ${codeRepeat.code} ya existe. Intenta otro codigo.`)
+        }    
+        if (!title || !description || !thumbnail || !price || !stock || !code ) {
+            throw new Error('todos los campos son obligatorios!!')
+        }    
+        
         let newProduct = {
+            id,
             title: title,
-            desciption: desciption,
+            description: description,
             thumbnail: thumbnail,
             price: price,
             stock: stock,
             code: code
-        }        
-        
-        // validar no repetir code y sean obligatorios los campos
-        let codeRepeat = this.products.find(c => c.code === code)
-        if (codeRepeat) {
-            throw new Error(`El codigo : ${codeRepeat.code} ya existe. Intenta otro codigo.`)
-        }
-        if (!title || !desciption || !thumbnail || !price || !stock || !code ) {
-            throw new Error('todos los campos son obligatorios!!')
-        }
-        // id incrementable
-        let lenght = this.products.length
-        if ( lenght === 0 ) {
-            newProduct.id = (this.products.length) + 1
-        } else {
-            newProduct.id = ( this.products.length - 1 ) + 1
-        }
-
-        this.products.push(newProduct)
-    }
-
-    getProducts = () => {
-        if ( this.products.length > 1 ) {
-            return this.products  
-        } else {
-            throw new Error('no hay productos en tu plataforma.')
-        } 
-    }
+        }            
+        contentFile.push(newProduct)
+        // guardar en file
+        return fs.promises.writeFile(this.path, JSON.stringify(contentFile,null,2), 'utf-8')
+    }    
 
     getProductsById = (id) => {
         let arr = this.products
@@ -53,10 +64,17 @@ class ProductManager {
     }
 }
 
-let test = new ProductManager()
+let marzo = new ProductManager('./newfile.json')
+marzo.getProducts()
+marzo.addProduct('caja', 'etc...', 'http://img...', 123, 2,3) 
+marzo.addProduct('caja', 'etc...', 'http://img...', 123, 2,8) 
+marzo.addProduct('caja', 'etc...', 'http://img...', 123, 2,56) 
 
+/*
 test.addProduct('caja', 'etc...', 'http://img...', 123, 2,3)
 test.addProduct('caja', 'etc...', 'http://img...', 123, 2,4) 
-
+*/
 /* test.getProducts() */
-test.getProductsById(1)
+/*
+test.getProductsById(1) 
+*/

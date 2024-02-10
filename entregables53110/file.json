@@ -1,0 +1,29 @@
+[
+     {
+          "id": 1,
+          "title": "title",
+          "description": "description here",
+          "thumbnail": "link here",
+          "price": 12,
+          "stock": 13,
+          "code": 15
+     },
+     {
+          "id": 3,
+          "title": "title",
+          "description": "description here",
+          "thumbnail": "NUEVO link ",
+          "price": 100000,
+          "stock": 125,
+          "code": 16
+     },
+     {
+          "id": 4,
+          "title": "title",
+          "description": "description here",
+          "thumbnail": "link here",
+          "price": 12,
+          "stock": 13,
+          "code": 14
+     }
+]
