@@ -6,6 +6,15 @@
           "thumbnail": "link here",
           "price": 12,
           "stock": 13,
+          "code": 14
+     },
+     {
+          "id": 2,
+          "title": "title",
+          "description": "description here",
+          "thumbnail": "link here",
+          "price": 12,
+          "stock": 13,
           "code": 15
      },
      {
@@ -25,5 +34,14 @@
           "price": 12,
           "stock": 13,
           "code": 14
+     },
+     {
+          "id": 5,
+          "title": "title",
+          "description": "description here",
+          "thumbnail": "link here",
+          "price": 12,
+          "stock": 13,
+          "code": 17
      }
 ]
